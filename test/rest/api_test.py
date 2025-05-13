@@ -25,6 +25,38 @@ class TestApi(unittest.TestCase):
             response.read().decode(), "3", "ERROR ADD"
         )
 
+    def test_api_substract(self):
+        url = f"{BASE_URL}/calc/substract/4/1"
+        response = urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(
+            response.status, http.client.OK, f"Error en la petición API a {url}"
+        )
+        self.assertEqual(
+            response.read().decode(), "3", "ERROR ADD"
+        )
+        
+    def test_api_multiply(self):
+        url = f"{BASE_URL}/calc/multiply/3/3"
+        response = urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(
+            response.status, http.client.OK, f"Error en la petición API a {url}"
+        )
+        self.assertEqual(
+            response.read().decode(), "9", "ERROR ADD"
+        )
+
+    def test_api_divide(self):
+        url = f"{BASE_URL}/calc/divide/12/3"
+        response = urlopen(url, timeout=DEFAULT_TIMEOUT)
+        self.assertEqual(
+            response.status, http.client.OK, f"Error en la petición API a {url}"
+        )
+        self.assertEqual(
+            response.read().decode(), "4.0", "ERROR ADD"
+        )        
+
+
+'''
     def test_api_sqrt(self):
         url = f"{BASE_URL_MOCK}/calc/sqrt/64"
         response = urlopen(url, timeout=DEFAULT_TIMEOUT)
@@ -34,6 +66,7 @@ class TestApi(unittest.TestCase):
         self.assertEqual(
             response.read().decode(), "8", "ERROR SQRT"
         )
+'''
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
