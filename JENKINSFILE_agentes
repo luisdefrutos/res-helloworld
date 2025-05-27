@@ -3,66 +3,59 @@ pipeline {
 
     options { skipDefaultCheckout() }
 
-     stages {
+    stages {
         stage('Get Code') {
             steps {
                 // Obtener código del repo
-               git 'https://github.com/luisdefrutos/res-helloworld.git'
-	            echo WORKSPACE
+                git 'https://github.com/luisdefrutos/res-helloworld.git'
+                echo WORKSPACE
                 bat 'dir'
                 stash name:'code', includes:'**'
             }
         }
-    
+
         stage('Build') {
-           steps {
-              echo 'Eyyy, esto es Python. No hay que compilar nada!!!'
-           }
+            steps {
+                echo 'Eyyy, esto es Python. No hay que compilar nada!!!'
+            }
         }
-        
-        stage('Tests')
-        {
-            parallel
-            {
+
+        stage('Tests') {
+            parallel {
                 stage('Unit') {
-                    agent {label 'agent1'}
+                    agent { label 'flask-agent' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                             unstash name:'code'
-                            sh '''
-                                ls -la
-                                export PYTHONPATH=${WORKSPACE}
-                                /home/agent1/.local/bin/pytest --junitxml=result-unit.xml test/unit
+                            bat '''
+                                set PYTHONPATH=.
+                                pytest --junitxml=result-unit.xml test\\unit
                             '''
                             stash name:'unit-res', includes:'result-unit.xml'
-                       }
+                        }
                     }
-                }   
-                
-                
+                }
+
                 stage('Rest') {
-                    agent {label 'agent2'}
+                    agent { label 'wiremock-agent' }
                     steps {
-                      catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                        unstash name:'code'
-                        sh '''
-                            export FLASK_APP=app/api.py                          
-                            /home/agent2/.local/bin/flask run &
+                        catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                            unstash name:'code'
+                            bat '''
+                                set FLASK_APP=app\\api.py
+                                start flask run
 
-                            sleep 4
+                                start java -jar C:\\UNIR\\Ejercicios\\wiremock-jre8-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock
 
-                            java -jar /home/agent2/wiremock/wiremock-standalone-3.3.1.jar --port 9090 --root-dir /home/agent2/wiremock &
-                            export PYTHONPATH=${WORKSPACE}
-                            
-                            sleep 15
-                            
-                            /home/agent2/.local/bin/pytest --junitxml=result-rest.xml test/rest
-                        '''
-                      }
-                      stash name:'rest-res', includes:'result-rest.xml'
-                    }    
-                }                
-                
+                                ping -n 10 127.0.0.1
+
+                                set PYTHONPATH=.
+                                pytest --junitxml=result-rest.xml test\\rest
+                            '''
+                            stash name:'rest-res', includes:'result-rest.xml'
+                        }
+                    }
+                }
             }
         }
 
@@ -70,9 +63,8 @@ pipeline {
             steps {
                 unstash name:'unit-res'
                 unstash name:'rest-res'
-                junit 'result*.xml' 
+                junit 'result*.xml'
             }
         }
-     
     }
 }
