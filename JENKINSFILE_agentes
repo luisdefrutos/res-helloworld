@@ -44,7 +44,7 @@ pipeline {
                             bat '''
                                 set FLASK_APP=app\\api.py
 
-                                start java -jar C:\\UNIR\\Ejercicios\\wiremock-jre8-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock
+                                start java -jar C:\\UNIR\\Ejercicios\\wiremock-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock
                                 start flask run
 
                                 ping -n 20 127.0.0.1
