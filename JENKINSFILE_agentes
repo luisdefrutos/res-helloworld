@@ -6,11 +6,10 @@ pipeline {
     stages {
         stage('Get Code') {
             steps {
-                // Obtener código del repo
                 git 'https://github.com/luisdefrutos/res-helloworld.git'
                 echo WORKSPACE
                 bat 'dir'
-                stash name:'code', includes:'**'
+                stash name: 'code', includes: '**'
             }
         }
 
@@ -26,12 +25,12 @@ pipeline {
                     agent { label 'flask-agent' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                            unstash name:'code'
+                            unstash name: 'code'
                             bat '''
                                 set PYTHONPATH=.
                                 pytest --junitxml=result-unit.xml test\\unit
                             '''
-                            stash name:'unit-res', includes:'result-unit.xml'
+                            stash name: 'unit-res', includes: 'result-unit.xml'
                         }
                     }
                 }
@@ -40,19 +39,20 @@ pipeline {
                     agent { label 'wiremock-agent' }
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                            unstash name:'code'
+                            unstash name: 'code'
                             bat '''
                                 set FLASK_APP=app\\api.py
 
-                                start java -jar C:\\UNIR\\Ejercicios\\wiremock-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock
-                                start flask run
+                                start /min cmd /c "flask run"
+                                ping -n 10 127.0.0.1
 
-                                ping -n 20 127.0.0.1
+                                start /min cmd /c "java -jar C:\\UNIR\\Ejercicios\\wiremock-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock"
+                                ping -n 10 127.0.0.1
 
                                 set PYTHONPATH=.
                                 pytest --junitxml=result-rest.xml test\\rest
                             '''
-                            stash name:'rest-res', includes:'result-rest.xml'
+                            stash name: 'rest-res', includes: 'result-rest.xml'
                         }
                     }
                 }
@@ -61,8 +61,8 @@ pipeline {
 
         stage('Results') {
             steps {
-                unstash name:'unit-res'
-                unstash name:'rest-res'
+                unstash name: 'unit-res'
+                unstash name: 'rest-res'
                 junit 'result*.xml'
             }
         }
