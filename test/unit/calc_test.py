@@ -61,6 +61,14 @@ class TestCalculate(unittest.TestCase):
     def test_divide_method_fails_with_zero(self):
             with self.assertRaises(TypeError):
                 self.calc.divide(10, 0)
+                
+    def test_check_types_mixed_inputs(self):
+        with self.assertRaises(TypeError):
+            self.calc.check_types(1, "2")  # uno bien, otro mal
+
+        with self.assertRaises(TypeError):
+            self.calc.check_types("1", 2)  # otro caso mixto
+
 
         
        
