@@ -2,6 +2,7 @@ import unittest
 import pytest
 
 from app import util
+from app.util import InvalidConvertToNumber 
 
 
 @pytest.mark.unit
@@ -22,6 +23,16 @@ class TestUtil(unittest.TestCase):
         self.assertRaises(TypeError, util.convert_to_number, "s")
         self.assertRaises(TypeError, util.convert_to_number, None)
         self.assertRaises(TypeError, util.convert_to_number, object())
+        
+    def test_invalid_convert_to_number_with_int(self):
+        assert InvalidConvertToNumber("42") == 42
+
+    def test_invalid_convert_to_number_with_float(self):
+        assert InvalidConvertToNumber("3.14") == 3.14
+
+    def test_invalid_convert_to_number_with_invalid(self):
+        with self.assertRaises(TypeError):
+            InvalidConvertToNumber("not_a_number")
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
