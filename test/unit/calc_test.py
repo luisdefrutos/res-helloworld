@@ -10,7 +10,7 @@ class TestCalculate(unittest.TestCase):
         self.calc = Calculator()
 
     def test_add_method_returns_correct_result(self):
-        self.assertEqual(5, self.calc.add(2, 2))  # fallo intencionado
+        self.assertEqual(8, self.calc.add(4, 4))  
         self.assertEqual(4, self.calc.add(2, 2))
         self.assertEqual(0, self.calc.add(2, -2))
         self.assertEqual(0, self.calc.add(-2, 2))
