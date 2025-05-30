@@ -26,6 +26,7 @@ pipeline {
                             steps {
                                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                                     bat '''
+                                        cd %WORKSPACE%
                                         set PYTHONPATH=.
                                         pytest --junitxml=result-unit.xml test\\unit
                                     '''
@@ -38,6 +39,7 @@ pipeline {
                     steps {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                             bat '''
+                                cd %WORKSPACE%
                                 set FLASK_APP=app\\api.py
                                 start flask run
                                 start java -jar C:\\UNIR\\Ejercicios\\wiremock-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock
@@ -64,6 +66,7 @@ pipeline {
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     bat '''
+                    cd %WORKSPACE%
                     set PYTHONPATH=.
                     coverage run --branch --source=app --omit=app\\__init__.py,app\\api.py -m pytest test\\unit
                     coverage xml
