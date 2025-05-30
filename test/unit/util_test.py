@@ -33,6 +33,15 @@ class TestUtil(unittest.TestCase):
     def test_invalid_convert_to_number_with_invalid(self):
         with self.assertRaises(TypeError):
             InvalidConvertToNumber("not_a_number")
+            
+    def test_validate_permissions_user1(self):
+        result = util.validate_permissions("sum", "user1")
+        self.assertTrue(result)
+
+    def test_validate_permissions_other_user(self):
+        result = util.validate_permissions("sum", "otro_usuario")
+        self.assertFalse(result)
+
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
