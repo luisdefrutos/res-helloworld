@@ -10,6 +10,7 @@ class TestCalculate(unittest.TestCase):
         self.calc = Calculator()
 
     def test_add_method_returns_correct_result(self):
+        self.assertEqual(5, self.calc.add(2, 2))  # fallo intencionado
         self.assertEqual(4, self.calc.add(2, 2))
         self.assertEqual(0, self.calc.add(2, -2))
         self.assertEqual(0, self.calc.add(-2, 2))
@@ -55,6 +56,8 @@ class TestCalculate(unittest.TestCase):
         self.assertEqual(0, self.calc.substract(0, 0))
         self.assertEqual(0, self.calc.substract(0, 0))
         self.assertRaises(TypeError, self.calc.substract, "0", 0)
+        
+       
         
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
