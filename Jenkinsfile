@@ -5,9 +5,12 @@ pipeline {
         stage('Get Code') {
             steps {
                 // Obtener código del repo
-                git 'https://github.com/luisdefrutos/res-helloworld'
-                bat 'dir'
-                echo WORKSPACE
+                // git 'https://github.com/luisdefrutos/res-helloworld'
+                // bat 'dir'
+                // echo WORKSPACE
+                 echo " Ejecutando pipeline en rama: ${env.BRANCH_NAME}"
+                 bat 'dir'
+                 echo " Ruta del WORKSPACE: ${env.WORKSPACE}"
             }
         }
     
