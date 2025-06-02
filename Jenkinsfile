@@ -17,13 +17,13 @@ pipeline {
                 stage('Unit') {
                     agent { label 'test-agent' }
                     steps {
-                        whoami()
+                        bat 'whoami'
                         bat 'hostname'
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                             bat '''
                                 cd %WORKSPACE%
                                 set PYTHONPATH=.
-                                pytest --junitxml=result-unit.xml test\unit
+                                pytest --junitxml=result-unit.xml test\\unit
                             '''
                         }
                         stash includes: 'result-unit.xml', name: 'unit-results'
@@ -33,18 +33,16 @@ pipeline {
                 stage('Rest') {
                     agent { label 'flask-agent' }
                     steps {
-                        whoami()
+                        bat 'whoami'
                         bat 'hostname'
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                             bat '''
                                 cd %WORKSPACE%
-                                set FLASK_APP=app\api.py
+                                set FLASK_APP=app\\api.py
                                 start flask run
-                                start java -jar C:\UNIR\Ejercicios\wiremock-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\wiremock
-
+                                start java -jar C:\\UNIR\\Ejercicios\\wiremock-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock
                                 ping -n 10 127.0.0.1
-
-                                pytest --junitxml=result-rest.xml test\rest
+                                pytest --junitxml=result-rest.xml test\\rest
                             '''
                         }
                         stash includes: 'result-rest.xml', name: 'rest-results'
@@ -82,7 +80,7 @@ pipeline {
                     bat '''
                         cd %WORKSPACE%
                         set PYTHONPATH=.
-                        coverage run --branch --source=app --omit=app\__init__.py,app\api.py -m pytest test\unit
+                        coverage run --branch --source=app --omit=app\\__init__.py,app\\api.py -m pytest test\\unit
                         coverage xml
                         coverage html
                     '''
@@ -107,10 +105,13 @@ pipeline {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     echo 'Ejecutando prueba de rendimiento con JMeter...'
-                    bat '"C:\jmeter\apache-jmeter-5.6.3\bin\jmeter.bat" -n -t jmeter\jmeter-test.jmx -l jmeter-report.jtl'
-                    bat 'type jmeter-report.jtl'
+                    bat '''
+                        "C:\\jmeter\\apache-jmeter-5.6.3\\bin\\jmeter.bat" -n -t jmeter\\jmeter-test.jmx -l jmeter-report.jtl
+                        type jmeter-report.jtl
+                    '''
                 }
             }
         }
     }
 }
+
