@@ -81,6 +81,15 @@ pipeline {
 
             }
         }
+        
+        stage('Bandit') {
+            steps {
+                echo 'Analizando seguridad con Bandit...'
+                bat 'bandit -r app > result-bandit.txt'
+                bat 'type result-bandit.txt'
+            }
+        }
+
 
         
      }
