@@ -4,7 +4,7 @@ pipeline {
 
     stages {
         stage('Get Code') {
-            agent { label 'master' }
+            agent { label 'test-agent' }
             steps {
                 echo "Ejecutando pipeline en rama: ${env.BRANCH_NAME}"
                 bat 'dir'
