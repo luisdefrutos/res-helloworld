@@ -70,7 +70,7 @@ pipeline {
                         type result-flake8.txt
                     '''
                 }
-            recordIssues tools: [python(pattern: 'result-flake8.txt')], failOnError: false
+            /*recordIssues tools: [python(pattern: 'result-flake8.txt')], failOnError: false*/
             }
         }
 
@@ -98,7 +98,7 @@ pipeline {
                     bat 'bandit -r app > result-bandit.txt'
                     bat 'type result-bandit.txt'
                 }
-        recordIssues tools: [python(pattern: 'result-bandit.txt')], failOnError: false
+            /*recordIssues tools: [python(pattern: 'result-bandit.txt')], failOnError: false */
             }
         }
 
