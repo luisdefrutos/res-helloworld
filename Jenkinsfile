@@ -81,12 +81,20 @@ pipeline {
 
             }
         }
-        
+
         stage('Bandit') {
             steps {
                 echo 'Analizando seguridad con Bandit...'
                 bat 'bandit -r app > result-bandit.txt'
                 bat 'type result-bandit.txt'
+            }
+        }
+
+        stage('Rendimiento - JMeter') {
+            steps {
+                echo 'Ejecutando prueba de rendimiento con JMeter...'
+                bat '"C:\\jmeter\\apache-jmeter-5.6.3\\bin\\jmeter.bat" -n -t jmeter\\jmeter-test.jmx -l jmeter-report.jtl'
+                bat 'type jmeter-report.jtl'
             }
         }
 
