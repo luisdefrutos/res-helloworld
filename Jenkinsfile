@@ -52,7 +52,7 @@ pipeline {
         }
 
         stage('Results') {
-            agent { label 'master' }
+         agent any
             steps {
                 unstash 'unit-results'
                 unstash 'rest-results'
