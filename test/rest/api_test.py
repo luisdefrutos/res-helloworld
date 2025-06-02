@@ -1,7 +1,7 @@
 import http.client
 import os
 import unittest
-from urllib.request import urlopen
+from urllib.request import urlopen, HTTPError
 
 import pytest
 
@@ -53,7 +53,18 @@ class TestApi(unittest.TestCase):
         )
         self.assertEqual(
             response.read().decode(), "4.0", "ERROR ADD"
-        )        
+        )  
+              
+    def test_api_divide_by_zero(self):
+        """Ejercicio 3 - debe devolver 406 y mensaje 'ERROR DIVIDE/0' al dividir por cero"""
+        url = f"{BASE_URL}/calc/divide/10/0"
+        try:
+            urlopen(url, timeout=DEFAULT_TIMEOUT)
+            self.fail("No se lanzó excepción al dividir por cero")
+        except HTTPError as e:
+            self.assertEqual(e.code, 406)
+            body = e.read().decode()
+            self.assertEqual(body, "ERROR DIVIDE/0", "Mensaje de error incorrecto")
 
 
 '''
