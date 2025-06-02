@@ -41,7 +41,7 @@ pipeline {
                                 set FLASK_APP=app\\api.py
                                 start flask run
                                 start java -jar C:\\UNIR\\Ejercicios\\wiremock-standalone-4.0.0-beta.2.jar --port 9090 --root-dir test\\wiremock
-                                ping -n 10 127.0.0.1
+                                ping -n 20 127.0.0.1
                                 pytest --junitxml=result-rest.xml test\\rest
                             '''
                         }
