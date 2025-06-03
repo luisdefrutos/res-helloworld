@@ -112,6 +112,7 @@ pipeline {
                         type jmeter-report.jtl
                     '''
                 }
+            perfReport sourceDataFiles: 'jmeter-report.jtl', errorFailedThreshold: 100, errorUnstableThreshold: 90
             }
         }
     }
