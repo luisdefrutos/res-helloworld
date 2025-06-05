@@ -116,5 +116,13 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            echo "Limpiando workspace del agente..."
+            cleanWs()
+        }
+    }
+
 }
 
