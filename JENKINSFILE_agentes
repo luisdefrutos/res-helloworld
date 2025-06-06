@@ -117,10 +117,12 @@ pipeline {
         }
     }
 
-    post {
+  post {
         always {
-            echo "Limpiando workspace del agente..."
-            cleanWs()
+            node {
+                echo "Limpiando workspace del agente..."
+                cleanWs()
+            }
         }
     }
 
