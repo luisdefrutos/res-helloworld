@@ -116,14 +116,15 @@ pipeline {
             }
         }
     }
-  post {
+    post {
         always {
-            node {
+            node('test-agent') {
                 echo "Limpiando workspace del agente..."
                 cleanWs()
             }
         }
     }
+
 
 }
 
